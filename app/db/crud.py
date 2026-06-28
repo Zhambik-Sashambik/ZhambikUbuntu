@@ -22,3 +22,47 @@ def create_book(db: Session, title: str, description: str, price: float, categor
 
 def get_books(db: Session):
     return db.query(models.Book).all()
+    #  UPDATE (Обновление) 
+def update_category(db: Session, category_id: int, new_title: str):
+    """Обновляет название категории по её ID."""
+    category = db.query(models.Category).filter(models.Category.id == category_id).first()
+    if category:
+        category.title = new_title
+        db.commit()
+        db.refresh(category)
+    return category
+
+def update_book(db: Session, book_id: int, title: str = None, description: str = None, price: float = None, url: str = None):
+    """Обновляет поля книги по её ID."""
+    book = db.query(models.Book).filter(models.Book.id == book_id).first()
+    if book:
+        if title is not None:
+            book.title = title
+        if description is not None:
+            book.description = description
+        if price is not None:
+            book.price = price
+        if url is not None:
+            book.url = url
+        db.commit()
+        db.refresh(book)
+    return book
+
+# DELETE (Удаление) 
+def delete_category(db: Session, category_id: int):
+    """Удаляет категорию по ID. Возвращает True, если удаление было успешным."""
+    category = db.query(models.Category).filter(models.Category.id == category_id).first()
+    if category:
+        db.delete(category)
+        db.commit()
+        return True
+    return False
+
+def delete_book(db: Session, book_id: int):
+    """Удаляет книгу по ID. Возвращает True, если удаление было успешным."""
+    book = db.query(models.Book).filter(models.Book.id == book_id).first()
+    if book:
+        db.delete(book)
+        db.commit()
+        return True
+    return False
