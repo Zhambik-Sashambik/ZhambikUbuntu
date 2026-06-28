@@ -66,3 +66,15 @@ def delete_book(db: Session, book_id: int):
         db.commit()
         return True
     return False
+
+def get_category(db: Session, category_id: int):
+    return db.query(models.Category).filter(models.Category.id == category_id).first()
+
+def get_category_by_title(db: Session, title: str):
+    return db.query(models.Category).filter(models.Category.title == title).first()
+
+def get_book(db: Session, book_id: int):
+    return db.query(models.Book).filter(models.Book.id == book_id).first()
+
+def get_books_by_category(db: Session, category_id: int):
+    return db.query(models.Book).filter(models.Book.category_id == category_id).all()
